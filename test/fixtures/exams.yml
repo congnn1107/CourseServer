@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  test_id: 1
+  start_at: 2022-09-07 16:22:26
+  end_at: 2022-09-07 16:22:26
+  expire_at: 2022-09-07 16:22:26
+
+two:
+  user_id: 1
+  test_id: 1
+  start_at: 2022-09-07 16:22:26
+  end_at: 2022-09-07 16:22:26
+  expire_at: 2022-09-07 16:22:26
