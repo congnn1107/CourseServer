@@ -91,7 +91,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_22_081824) do
     t.boolean "is_active"
     t.datetime "actived_at"
     t.string "activation_token"
-    t.integer "role"
+    t.boolean "is_admin", default: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"

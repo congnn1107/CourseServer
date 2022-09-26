@@ -50,3 +50,6 @@ gem 'rack-cors'
 gem "uuidtools"
 gem 'tzinfo-data', '~> 1.2021', '>= 1.2021.5'
 gem 'devise'
+gem 'jwt'
+gem 'active_hash'
+gem 'dotenv-rails'
