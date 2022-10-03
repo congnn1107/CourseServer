@@ -5,7 +5,7 @@ module Api
         skip_before_action :authenticate_user, only: :create
 
         def create
-          form = LoginForm.new(login_params)
+          form = Users::LoginForm.new(login_params)
           if form.valid?
             user = form.login
             if user
