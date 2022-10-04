@@ -17,13 +17,13 @@ module Api
 
               @current_user = user
             rescue JWT::ExpiredSignature => e
-              json_response({ error: "Session has expired, you must login again!" }, :unauthorized)
+              render json: { error: "Session has expired, you must login again!" }, status: :unauthorized
             end
           end
         end
 
         def admin_user
-          json_response({ error: "Permission denied!" }, :forbidden) unless @current_user.is_admin
+          render json: { error: "Permission denied!" }, status: :forbidden unless @current_user.is_admin
         end
       end
     end

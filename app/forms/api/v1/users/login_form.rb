@@ -6,7 +6,7 @@ module Api
         validates :email, :password, presence: true
 
         def login
-          user = User.users.find_by(email: email)
+          user = User.find_by(email: email)
 
           if user&.valid_password?(password)
             return user
