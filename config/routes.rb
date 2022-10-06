@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  default_url_options host: ENV["HOST"], port: ENV["PORT"]
+
   namespace :api do
     namespace :v1 do
       namespace :admin do
