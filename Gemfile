@@ -46,10 +46,12 @@ group :development do
   # gem "spring"
 end
 
-gem 'rack-cors'
+gem "rack-cors"
 gem "uuidtools"
-gem 'tzinfo-data', '~> 1.2021', '>= 1.2021.5'
-gem 'devise'
-gem 'jwt'
-gem 'active_hash'
-gem 'dotenv-rails'
+gem "tzinfo-data", "~> 1.2021", ">= 1.2021.5"
+gem "devise"
+gem "jwt"
+gem "active_hash"
+gem "dotenv-rails"
+gem "interactor", "~> 3.0"
+gem "pry", "~> 0.13.1"
