@@ -23,7 +23,7 @@ module Api
 
             if is_publish.present?
               course.is_publish = is_publish
-              course.touch("published_at")
+              course.touch("published_at") if is_publish
             end
 
             course.save

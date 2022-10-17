@@ -5,10 +5,15 @@ module Api
         before_action :set_model, only: [:update, :show, :destroy]
 
         def index
-          courses = Course.all
-          jsons_courses = courses.map { |course| export_json(course) }
+          @limit = params[:limit] || PER_PAGE
+          @page = params[:page] || 1
 
-          render json: jsons_courses, status: :ok
+          @pagy, @records = pagy(
+            Course.all,
+            items: @limit,
+            page: @page,
+          )
+          json_list_response(@records, ::Admin::Courses::CourseSerializer)
         end
 
         def create
@@ -23,7 +28,7 @@ module Api
         end
 
         def show
-          render json: export_json(@course), status: :ok
+          json_response(@course, ::Admin::Courses::CourseSerializer)
         end
 
         def update
@@ -61,10 +66,6 @@ module Api
         end
 
         private
-
-        def export_json(course)
-          course.as_json(include: { cover: { include: [:file_blob], methods: :file_url } })
-        end
 
         def create_params
           params.permit(:name, :description)
