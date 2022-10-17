@@ -9,6 +9,7 @@ admin = User.create({
                       name: 'Admin',
                       email: 'admin@admin.com',
                       password: '12345678',
+                      date_of_birth: '1/1/1991',
                       is_admin: true,
                       is_active: true
                     })
