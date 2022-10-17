@@ -25,6 +25,8 @@ module Api
           @user = User.users.new(create_params)
 
           if @user.save
+            @user.update(is_active: true)
+
             json_response(@user, UserSerializer)
           else
             error_response(@user.errors.to_hash(true), 'Error when create user')
