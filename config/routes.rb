@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         post "/login", to: "sessions#create"
         resources :courses do
           resources :lessons
+          resources :quizzes
         end
         resources :users
       end

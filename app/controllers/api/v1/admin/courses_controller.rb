@@ -21,7 +21,7 @@ module Api
           if form.valid?
             course = form.save
 
-            render json: export_json(course), status: :ok
+            json_response(course, ::Admin::Courses::CourseSerializer)
           else
             render json: { message: form.errors.full_messages }, status: :unprocessable_entity
           end
