@@ -5,7 +5,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable
 
-  validates :email, :name, :date_of_birth, presence: true
+  validates :email, :name, :date_of_birth, presence: true, unless: -> { new_record? }
   validates :password, presence: true, if: -> { new_record? }
   validates :email, uniqueness: true
 
