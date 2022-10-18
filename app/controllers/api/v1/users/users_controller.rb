@@ -7,6 +7,7 @@ module Api
         def create
           form = UserForms::CreateForm.new(user_params)
           if form.valid?
+            binding.pry
             user = form.create
             if !!user
               render json: user, status: :ok
