@@ -6,10 +6,11 @@
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
 admin = User.create({
-                      name: 'Admin',
-                      email: 'admin@admin.com',
-                      password: '12345678',
-                      date_of_birth: '1/1/1991',
+                      name: "Admin",
+                      email: "admin@admin.com",
+                      password: "12345678",
+                      date_of_birth: "1/1/1991",
                       is_admin: true,
-                      is_active: true
+                      is_active: true,
                     })
+question_type = QuestionType.create({ name: "One Answer Test" })

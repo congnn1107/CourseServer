@@ -11,7 +11,7 @@ module Api
           @page = params[:page] || 1
 
           @pagy, @records = pagy(
-            Lesson.all,
+            @course.lessons,
             items: @limit,
             page: @page,
           )
@@ -45,7 +45,7 @@ module Api
           if @lesson.destroy
             json_response(@lesson, ::Admin::Courses::Lessons::LessonSerializer)
           else
-            error_response(@lesson.errors.to_hash(true), "Error when update lesson!")
+            error_response(@lesson.errors.to_hash(true), "Error when delete lesson!")
           end
         end
 

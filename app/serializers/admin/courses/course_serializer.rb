@@ -6,6 +6,7 @@ module Admin
                  :created_at, :updated_at
       has_one :cover, serializer: ::Shared::CoverSerializer
       has_many :lessons, each_serializer: Lessons::LessonSerializer
+      has_many :quizzes, each_serializer: Quizzes::QuizSerializer
     end
   end
 end
