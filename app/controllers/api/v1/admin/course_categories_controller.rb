@@ -31,12 +31,12 @@ module Api
           end
   
           def show
-            json_response(@course, ::Admin::Courses::CourseSerializer)
+            json_response(@course_category, ::Admin::CourseCategories::CourseCategorySerializer)
           end
   
           def update
             if @course_category.update(update_params)
-              json_response(@course_category, ::Admin::Categories::CourseCategoriesSerializer)
+              json_response(@course_category, ::Admin::CourseCategories::CourseCategorySerializer)
             else
               error_response(@course_category.errors.to_hash(true), "Error when update category!")
             end
@@ -59,7 +59,7 @@ module Api
           end
   
           def set_model
-            @course_category = CourseCategory.where(course_id: params[:course_id]).take
+            @course_category = CourseCategory.where(course_id: params[:id]).take
           rescue ActiveRecord::RecordNotFound => e
             render json: { message: "CourseCategories not found!" }, status: :not_found
           end
