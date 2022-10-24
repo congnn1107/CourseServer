@@ -13,7 +13,22 @@ module Api
             items: @limit,
             page: @page,
           )
-          json_list_response(@records, ::Admin::Courses::CourseSerializer)
+          render json: @records,
+                 each_serializer: ::Admin::Courses::CourseSerializer,
+                 status: :ok,
+                 adapter: :json,
+                 meta: {
+                   total: @pagy.count,
+                   pages: @pagy.pages,
+                   page: @pagy.page,
+                   from: @pagy.from,
+                   to: @pagy.to,
+                   per: @limit.to_i,
+                   count: @pagy.items,
+                   kaku:{lulu:"milu"}
+                 }
+                
+          # json_list_response(@records, ::Admin::Courses::CourseSerializer)
         end
 
         def create

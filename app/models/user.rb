@@ -17,4 +17,6 @@ class User < ApplicationRecord
   def create_token
     JWT.encode({ id:, exp: TOKEN_EXPIRE }, Rails.application.secrets.secret_key_base)
   end
+  has_many :reviews, dependent: :destroy
+  has_many :course_subscribes, dependent: :destroy
 end

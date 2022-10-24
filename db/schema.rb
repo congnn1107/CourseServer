@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_18_163828) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_24_143254) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -47,6 +47,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_163828) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "course_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "category_id"
+  end
+
+  create_table "course_subscribes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "course_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "courses", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "uuid"
     t.string "name"
@@ -77,6 +97,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_163828) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "lesson_track_ups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "course_subscribe_id"
+    t.integer "is_done"
+    t.integer "is_current"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "lessons", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "uuid"
     t.string "name"
@@ -103,6 +131,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_163828) do
     t.integer "lesson_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "quiz_id"
   end
 
   create_table "questions_tests", id: false, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -119,6 +148,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_163828) do
     t.integer "lesson_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "reviews", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "content"
+    t.integer "stars"
+    t.integer "course_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "user_id"
   end
 
   create_table "submission_answers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -169,10 +206,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_18_163828) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "avatar"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "reviews", "users", name: "reviews_ibfk_1"
 end

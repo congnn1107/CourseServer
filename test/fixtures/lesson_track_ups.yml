@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  course_subscribe_id: 1
+  is_done: 1
+  is_current: 1
+
+two:
+  course_subscribe_id: 1
+  is_done: 1
+  is_current: 1

@@ -1,0 +1,2 @@
+class LessonTrackUp < ApplicationRecord
+end

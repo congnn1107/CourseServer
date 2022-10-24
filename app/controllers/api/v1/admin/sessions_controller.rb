@@ -8,7 +8,6 @@ module Api
         def create
           # login admin
           form = LoginForm.new(login_params)
-
           if form.valid?
             user = form.login
 
@@ -17,7 +16,7 @@ module Api
 
               render json: { token: token }, status: :ok
             else
-              render json: { message: "Invalid information!" }, status: :unauthorized
+              render json: { message: "kol"}, status: :unauthorized
             end
           else
             render json: { message: form.errors.full_messages }, status: :unprocessable_entity
