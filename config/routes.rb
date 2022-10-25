@@ -6,7 +6,6 @@ Rails.application.routes.draw do
       namespace :admin do
         post "/login", to: "sessions#create"
         resources :categories
-        resources :course_categories, :path => '/course-categories'
         resources :courses do
           resources :lessons
           resources :quizzes do

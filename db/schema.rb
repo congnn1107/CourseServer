@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_24_143254) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_25_154834) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -53,13 +53,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_24_143254) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "course_categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "course_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "category_id"
-  end
-
   create_table "course_subscribes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "course_id"
     t.integer "user_id"
@@ -77,6 +70,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_24_143254) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category"
   end
 
   create_table "exams", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -188,6 +182,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_24_143254) do
     t.integer "duration"
     t.integer "course_id"
     t.integer "lesson_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_lessons", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "lesson_id"
+    t.integer "user_id"
+    t.integer "is_done"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -83,11 +83,11 @@ module Api
         private
 
         def create_params
-          params.permit(:name, :description)
+          params.permit(:name, :description,:category)
         end
 
         def update_params
-          params.permit(:name, :description, :is_publish, :cover_url)
+          params.permit(:name, :description, :is_publish, :cover_url,:category)
         end
 
         def set_model
