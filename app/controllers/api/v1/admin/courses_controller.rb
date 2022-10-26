@@ -4,6 +4,37 @@ module Api
       class CoursesController < BaseController
         before_action :set_model, only: [:update, :show, :destroy]
 
+
+        def search
+          @search_results = Course.where(category_id: params[:category_id])
+          if params[:criteria] == "New"
+            @search_results = @search_results.order("created_at desc")
+          end
+          @limit = params[:limit] || PER_PAGE
+          @page = params[:page] || 1
+
+          @pagy, @records = pagy(
+            @search_results,
+            items: @limit,
+            page: @page,
+          )
+          render json: @records,
+                 each_serializer: ::Admin::Courses::CourseSerializer,
+                 status: :ok,
+                 adapter: :json,
+                 meta: {
+                   total: @pagy.count,
+                   pages: @pagy.pages,
+                   page: @pagy.page,
+                   from: @pagy.from,
+                   to: @pagy.to,
+                   per: @limit.to_i,
+                   count: @pagy.items
+                 }
+                
+          # json_list_response(@records, ::Admin::Courses::CourseSerializer)
+        end
+
         def index
           @limit = params[:limit] || PER_PAGE
           @page = params[:page] || 1
