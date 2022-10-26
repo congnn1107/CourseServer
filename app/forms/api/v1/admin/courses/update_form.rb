@@ -3,13 +3,13 @@ module Api
     module Admin
       module Courses
         class UpdateForm < BaseForm
-          attr_accessor :name, :description, :is_publish, :cover_file, :cover_url, :course,:category
+          attr_accessor :name, :description, :is_publish, :cover_file, :cover_url, :course,:category_id
 
           validates :name, :description, presence: true
 
           def save
             course.name = name
-            course.category = category
+            course.category_id = category_id
             course.description = description
             course.cover_url = cover_url
 
@@ -38,7 +38,7 @@ module Api
             {
               name: name,
               description: description,
-              category:category
+              category_id:category_id
             }
           end
         end

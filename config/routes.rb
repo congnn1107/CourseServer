@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :admin do
         post "/login", to: "sessions#create"
+        resources :billboards
         resources :categories
         resources :courses do
           resources :lessons

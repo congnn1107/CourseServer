@@ -3,7 +3,7 @@ module Api
     module Admin
       module Courses
         class CreateForm < BaseForm
-          attr_accessor :name, :description, :category
+          attr_accessor :name, :description, :category_id
 
           validates :name, :description, presence: true
 
@@ -19,7 +19,7 @@ module Api
             {
               name: name,
               description: description,
-              category:category
+              category_id:category_id
             }
           end
         end
