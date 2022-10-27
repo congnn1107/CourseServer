@@ -8,23 +8,11 @@ module Api
           @limit = params[:limit] || PER_PAGE
           @page = params[:page] || 1
 
-          
-          @subscribes=CourseSubscribe.all.where(user_id: @current_user.id)
-          @index = []
-          @subscribes.each do |x|
-            @index.push(x.course_id)
-          end
-
           @pagy, @records = pagy(
             Course.all,
             items: @limit,
             page: @page,
           )
-          @records.each do |x|
-            if @index.include? x.id
-              puts x.flag=true
-            end
-          end
           # render json: :Users::Courses::CourseSerializer.new(
           #   Area.all, 
           #   { params: { paginate: paginate(pagy), current_user: @current_user } }

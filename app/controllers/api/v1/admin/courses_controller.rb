@@ -3,10 +3,12 @@ module Api
     module Admin
       class CoursesController < BaseController
         before_action :set_model, only: [:update, :show, :destroy]
-
+        before_action :authenticate_user
+        before_action :admin_user
 
         def search
-          @search_results = Course.where(category_id: params[:category_id])
+          @category = Category.where(name: params[:category].titleize).take
+          @search_results = Course.where(category_id: @category.id)
           if params[:criteria] == "New"
             @search_results = @search_results.order("created_at desc")
           end
