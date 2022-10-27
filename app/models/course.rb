@@ -1,5 +1,5 @@
 class Course < ApplicationRecord
-  attr_accessor :flag
+  attr_accessor :is_subscribed
   include Uuid
 
   before_create :set_uuid

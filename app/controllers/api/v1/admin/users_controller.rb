@@ -56,7 +56,7 @@ module Api
         end
 
         def update_params
-          params.permit(:name, :date_of_birth)
+          params.permit(:name, :date_of_birth,:image)
         end
 
         def set_model

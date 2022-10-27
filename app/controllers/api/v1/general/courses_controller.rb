@@ -7,14 +7,9 @@ module Api
         def search
           @category = Category.where(name: params[:category].titleize).take
           @search_results = Course.where(category_id: @category.id)
-
-          # render json: CourseSubscribe.where(user_id: @current_user.id)
-          # return
-
           if params[:criteria] == "New"
             @search_results = @search_results.order("created_at desc")
           end
-
           @limit = params[:limit] || PER_PAGE
           @page = params[:page] || 1
 
@@ -23,15 +18,6 @@ module Api
             items: @limit,
             page: @page,
           )
-
-          @records.each do |x|
-            if CourseSubscribe.where(user_id: @current_user.id,course_id: x.id).empty?
-              x.is_subscribed =false
-            else
-              x.is_subscribed =true
-            end
-          end
-
           render json: @records,
                  each_serializer: ::Users::Courses::CourseSerializer,
                  status: :ok,
@@ -68,11 +54,6 @@ module Api
         end
 
         def show
-          unless CourseSubscribe.where(user_id: @current_user.id,course_id: @course.id).empty?
-            @course.is_subscribed = true
-          else
-            @course.is_subscribed = false
-          end
           json_response(@course, ::Users::Courses::CourseSerializer)
         end
 

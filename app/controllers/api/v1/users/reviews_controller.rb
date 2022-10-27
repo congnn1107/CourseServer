@@ -15,12 +15,18 @@ module Api
               items: @limit,
               page: @page,
             )
+            @records = @records.reject{|x| x.user_id == @current_user.id}
   
             json_list_response(@records, ::Users::Courses::Reviews::ReviewSerializer)
           end
   
           def show
-            json_response(@records, ::Users::Courses::Reviews::ReviewSerializer)
+            @review = Review.all.where(user_id: @current_user.id, course_id: params[:course_id]).take
+            unless @review == nil
+              json_response(@review, ::Users::Courses::Reviews::ReviewSerializer)
+            else
+              render json: false
+            end
           end
   
           def create
@@ -47,6 +53,7 @@ module Api
           end
   
           def destroy
+            @review=Review.where(user_id: @current_user.id,course_id: params[:course_id]).take
             if @review.destroy
               json_response(@review, ::Users::Courses::Reviews::ReviewSerializer)
             else
@@ -68,12 +75,6 @@ module Api
             @course = Course.find(params[:course_id])
           rescue ActiveRecord::RecordNotFound => e
             render json: { message: "Course not found" }, status: :not_found
-          end
-  
-          def set_review
-            @review = @course.reviews.find(params[:id])
-          rescue ActiveRecord::RecordNotFound => e
-            render json: { message: "Course not found"}, status: :not_found
           end
         end
       end

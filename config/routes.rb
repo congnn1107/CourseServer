@@ -25,14 +25,21 @@ Rails.application.routes.draw do
         post "/login", to: "sessions#create"
         get "/profile", to: "users#show"
         # get "/courses", to: "courses#index" 
+        get "/courses/search", to: "courses#search"
+        get "/categories", to: "categories#index"
         resources :courses do
           resources :lessons
           resources :quizzes
           resources :reviews
+          delete 'reviews', to: 'reviews#destroy'
           put 'reviews', to: 'reviews#update'
         end
         
         post "/courses/:id/subscribes", to: "course_subscribes#create"
+      end
+
+      namespace :general do
+        get "/billboards", to: "billboards#index"
       end
     end
   end
