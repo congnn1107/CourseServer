@@ -11,7 +11,7 @@ class User < ApplicationRecord
 
   TOKEN_EXPIRE = 15.days.from_now.to_i
 
-  scope :users, -> { where(is_admin: false) }
+  scope :users, -> { }
   scope :admins, -> { where(is_admin: true) }
 
   def create_token

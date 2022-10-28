@@ -6,6 +6,22 @@ module Api
           before_action :set_course
           # before_action :set_review, only: %i[update show destroy]
 
+          def statistics
+            @reviews = Review.all.where(course_id: params[:course_id])
+            if @reviews.length == 0
+              render json:nil
+              return
+            end
+
+            stats = statisticize(@reviews)
+            rating = average(@reviews)
+
+            render json:{
+              stats: stats,
+              rating: rating
+            }
+          end
+
           def index
             @limit = params[:limit] || PER_PAGE
             @page = params[:page] || 1
@@ -16,8 +32,12 @@ module Api
               page: @page,
             )
             @records = @records.reject{|x| x.user_id == @current_user.id}
-  
-            json_list_response(@records, ::Users::Courses::Reviews::ReviewSerializer)
+
+            unless @records.empty?
+              json_list_response(@records, ::Users::Courses::Reviews::ReviewSerializer)
+            else
+              render json:@records
+            end
           end
   
           def show
@@ -35,7 +55,7 @@ module Api
               return 0
             end
             @review = Review.new(create_params)
-  
+            puts "AAAAAAAAAAAAAAa"
             if @review.save
               json_response(@review, ::Users::Courses::Reviews::ReviewSerializer)
             else
@@ -75,6 +95,20 @@ module Api
             @course = Course.find(params[:course_id])
           rescue ActiveRecord::RecordNotFound => e
             render json: { message: "Course not found" }, status: :not_found
+          end
+
+          def statisticize(reviews)
+            arr = []
+            (5).downto(1) do |x|
+              tmp = reviews.where(stars: x).length/reviews.length.to_f
+              arr << (tmp.truncate(2)*100).to_i
+            end
+            return arr
+          end
+
+          def average(reviews)
+            average = reviews.inject(0){|sum,review| sum+review.stars}/reviews.size.to_f
+            average.truncate(1)
           end
         end
       end

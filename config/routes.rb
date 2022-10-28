@@ -27,20 +27,19 @@ Rails.application.routes.draw do
         # get "/courses", to: "courses#index" 
         get "/courses/search", to: "courses#search"
         get "/categories", to: "categories#index"
+        get "/billboards", to: "billboards#index"
         resources :courses do
           resources :lessons
           resources :quizzes
+          get 'reviews/statistics', to: 'reviews#statistics'
           resources :reviews
           delete 'reviews', to: 'reviews#destroy'
           put 'reviews', to: 'reviews#update'
         end
         
-        post "/courses/:id/subscribes", to: "course_subscribes#create"
+        resources :course_subscribes, path: "/courses/:id/subscribes"
       end
 
-      namespace :general do
-        get "/billboards", to: "billboards#index"
-      end
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -9,18 +9,45 @@ module Api
             @page = params[:page] || 1
   
             @pagy, @records = pagy(
-              Course.all,
+              CourseSubscribe.all,
               items: @limit,
               page: @page,
             )
-            json_list_response(@records, ::Admin::Courses::CourseSerializer)
+            json_list_response(@records, ::Users::Courses::CourseSubscribes::CourseSubscribeSerializer)
           end
   
           def create
             subscribe = CourseSubscribe.new(course_id:params[:id],user_id:@current_user.id)
+
             if subscribe
               subscribe.save
-  
+              render json: subscribe
+            else
+              render json: { message: "Error"}, status: :unprocessable_entity
+            end
+            return
+
+            unless CourseSubscribe.where(course_id:params[:id],user_id:@current_user.id).empty?
+              render json: "You've already subscribed it before"
+              return
+            end
+            subscribe = CourseSubscribe.new(course_id:params[:id],user_id:@current_user.id)
+            
+            subscribes = UserLesson.all
+
+            subscribes.each do |x|
+              x.update(user_id: @current_user.id)
+            end
+            # lessons = Lesson.where(course_id:params[:id])
+            # lessons.each do |x|
+            #   lesson = UserLesson.new(user_id: @current_user,lesson_id: x.id)
+            #   lesson.save
+            # end
+
+
+            return
+            if subscribe
+              subscribe.save
               render json: subscribe
             else
               render json: { message: "Error"}, status: :unprocessable_entity
