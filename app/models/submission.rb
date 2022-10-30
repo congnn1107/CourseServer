@@ -1,5 +1,5 @@
 class Submission < ApplicationRecord
-  belongs_to :exam
+  belongs_to :quiz
   belongs_to :user, optional: true
 
   has_many :submission_details, dependent: :destroy

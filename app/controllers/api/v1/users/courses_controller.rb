@@ -15,20 +15,33 @@ module Api
             @search_results = @search_results.order("created_at desc")
           end
 
+          if params[:criteria] == "Most popular"
+            @search_results = @search_results.joins(:lessons)
+            .group('lessons.course_id')
+            .order('SUM(lessons.view_count) DESC')
+            .limit(7) 
+          end
+          
+          if params[:criteria] == "Trending"
+            @search_results = @search_results.joins(:lessons)
+            .group('lessons.course_id')
+            .order('SUM(lessons.stars) DESC')
+            .limit(7) 
+          end
+
           @limit = params[:limit] || PER_PAGE
           @page = params[:page] || 1
 
-          @pagy, @records = pagy(
-            @search_results,
-            items: @limit,
-            page: @page,
-          )
+          @pagy, @records = pagy(@search_results, items: @limit, page: @page)
 
           @records.each do |x|
-            if CourseSubscribe.where(user_id: @current_user.id,course_id: x.id).empty?
-              x.is_subscribed =false
+            if CourseSubscribe.where(
+                 user_id: @current_user.id,
+                 course_id: x.id,
+               ).empty?
+              x.is_subscribed = false
             else
-              x.is_subscribed =true
+              x.is_subscribed = true
             end
           end
 
@@ -43,9 +56,9 @@ module Api
                    from: @pagy.from,
                    to: @pagy.to,
                    per: @limit.to_i,
-                   count: @pagy.items
+                   count: @pagy.items,
                  }
-                
+
           # json_list_response(@records, ::Admin::Courses::CourseSerializer)
         end
 
@@ -53,13 +66,9 @@ module Api
           @limit = params[:limit] || PER_PAGE
           @page = params[:page] || 1
 
-          @pagy, @records = pagy(
-            Course.all,
-            items: @limit,
-            page: @page,
-          )
+          @pagy, @records = pagy(Course.all, items: @limit, page: @page)
           # render json: :Users::Courses::CourseSerializer.new(
-          #   Area.all, 
+          #   Area.all,
           #   { params: { paginate: paginate(pagy), current_user: @current_user } }
           #     )
           # render json: @subscribes
@@ -68,7 +77,11 @@ module Api
         end
 
         def show
-          unless CourseSubscribe.where(user_id: @current_user.id,course_id: @course.id).empty?
+          @course.user_id = @current_user.id
+          unless CourseSubscribe.where(
+                   user_id: @current_user.id,
+                   course_id: @course.id,
+                 ).empty?
             @course.is_subscribed = true
           else
             @course.is_subscribed = false
@@ -76,13 +89,37 @@ module Api
           json_response(@course, ::Users::Courses::CourseSerializer)
         end
 
-
         private
 
         def set_model
           @course = Course.includes(:cover).find(params[:id])
         rescue ActiveRecord::RecordNotFound => e
           render json: { message: "Course not found !" }, status: :not_found
+        end
+
+        def find_search_results
+          # Actully a lot of filtering happen here.
+          # But in this article let's focus on the order part.
+        
+          ['asc', 'desc'].each do |order_by_direction|
+            if params[:sortOption] == "sold_qty_#{order_by_direction}"
+              @search_results = @search_results
+                .joins("INNER JOIN (#{sales_sum_sql}) AS sales_sums ON sales_sums.product_id = search_results.id")
+                .order("sum_monthly_product_sales_quantity #{order_by_direction}")
+            end
+          end
+        
+          @search_results = @search_results.page(params[:page]).per(params[:per])
+        end
+
+        def sales_sum_sql
+          "
+          SELECT SUM(lessons.view_count) AS sum_monthly_product_sales_quantity,
+            `course_id` AS course_id
+          FROM `courses` INNER JOIN lessons`
+            ON `lessons`.`course_id` = `courses`.`id`
+          GROUP BY `course_id`
+          "
         end
       end
     end
